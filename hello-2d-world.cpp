@@ -78,15 +78,17 @@ const Vertex Vertices[] = {
     {{0.0f, 0.5f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}},
 
     //parallelogram
-    {{0.0f, 0.5f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}},
-    {{0.5f, 0.5f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}},
-    {{1.0f, 0.5f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}},
+    {{0.0f, 0.25f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}},
+    {{0.25f, 0.25f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}},
+    {{0.5f, 0.25f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}},
+    {{0.25f, 0.0f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}},
     {{0.5f, 0.0f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}},
-    {{1.0f, 0.0f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}},
-    {{1.5f, 0.0f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}}
+    {{0.75f, 0.0f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}}
 };
 
-const GLubyte Indices[] = {0,1,2,3,5,6,3,4,5}; //indice dos vertices no array Vertices[]
+const GLubyte Indices[] = {0,1,2,
+                           3,5,6,3,4,5,
+                           10,8,7,10,9,8,10,11,9,11,12,9}; //indice dos vertices no array Vertices[]
 
 /*const Vertex RightTriangleVertices[] = {
     {{0.0f, 0.0f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}},
@@ -142,6 +144,7 @@ void MyApp::destroyBufferObjects() {
 
 const glm::mat4 I(1.0f);
 const glm::mat4 M = glm::translate(glm::vec3(-1.0f, -1.0f, 0.0f));
+const glm::mat4 L = glm::translate(glm::vec3(-1.0f, 0.0f, 0.0f));
 
 void MyApp::drawScene() { //onde defino a matriz de transformação e o que vou desenhar
   // Drawing directly in clip space
@@ -161,6 +164,9 @@ void MyApp::drawScene() { //onde defino a matriz de transformação e o que vou de
 
   glUniformMatrix4fv(MatrixId, 1, GL_FALSE, glm::value_ptr(M));
   glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_BYTE, reinterpret_cast<GLvoid*>(3*sizeof(Indices[0]))); //6 pq sao "2 triangulos"
+  
+  glUniformMatrix4fv(MatrixId, 1, GL_FALSE, glm::value_ptr(L));
+  glDrawElements(GL_TRIANGLES, 12, GL_UNSIGNED_BYTE, reinterpret_cast<GLvoid*>(9 * sizeof(Indices[0])));
 
   Shaders->unbind();
   glBindVertexArray(0);
