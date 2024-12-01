@@ -62,20 +62,26 @@ typedef struct {
 } Vertex;
 
 const Vertex Vertices[] = {
+/*
+    {{0.0f, 0.0f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}},
+    {{2.0f, 0.0f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}},
+    {{2.0f, 2.0f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}},
+    {{0.0f, 2.0f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}},
+*/
 /*    {{0.25f, 0.25f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}},
     {{0.75f, 0.25f, 0.0f, 1.0f}, {0.0f, 1.0f, 0.0f, 1.0f}},
     {{0.50f, 0.75f, 0.0f, 1.0f}, {0.0f, 0.0f, 1.0f, 1.0f}},
 */
     //right triangle
     {{0.0f, 0.0f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}},
-    {{0.5f, 0.0f, 0.0f, 1.0f}, {0.0f, 1.0f, 0.0f, 1.0f}},
-    {{0.0f, 0.5f, 0.0f, 1.0f}, {0.0f, 0.0f, 1.0f, 1.0f}},
+    {{0.25f, 0.0f, 0.0f, 1.0f}, {0.0f, 1.0f, 0.0f, 1.0f}},
+    {{0.0f, 0.25f, 0.0f, 1.0f}, {0.0f, 0.0f, 1.0f, 1.0f}},
 
     //square
     {{0.0f, 0.0f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}},
-    {{0.5f, 0.0f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}},
-    {{0.5f, 0.5f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}},
-    {{0.0f, 0.5f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}},
+    {{0.25f, 0.0f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}},
+    {{0.25f, 0.25f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}},
+    {{0.0f, 0.25f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}},
 
     //parallelogram
     {{0.0f, 0.25f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}},
@@ -145,29 +151,107 @@ void MyApp::destroyBufferObjects() {
 const glm::mat4 I(1.0f);
 const glm::mat4 M = glm::translate(glm::vec3(-1.0f, -1.0f, 0.0f));
 const glm::mat4 L = glm::translate(glm::vec3(-1.0f, 0.0f, 0.0f));
-
+const glm::mat4 M1 = glm::translate(glm::vec3(-0.25f, 0.0f, 0.0f));
+glm::mat4 R = glm::rotate(I, glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+//M1 = glm::rotate(M1, glm::vec3(0.0f,-1.0f,0.0f));
+glm::mat4 Transform = R * M1;
+const glm::mat4 C = glm::translate(glm::vec3(0.0f, 0.25f, 0.0f));
+const glm::mat4 C2 = glm::translate(glm::vec3(0.25f, 0.0f, 0.0f));
+const glm::mat4 S = glm::scale(I, glm::vec3(2.0f, 2.0f, 1.0f));
+const glm::mat4 C3 = glm::translate(glm::vec3(-0.25f, 0.0f, 0.0f));
 void MyApp::drawScene() { //onde defino a matriz de transformação e o que vou desenhar
   // Drawing directly in clip space
 
   glBindVertexArray(VaoId);
   Shaders->bind();
   
+
+  /*
   glUniformMatrix4fv(MatrixId, 1, GL_FALSE, glm::value_ptr(I));
   glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_BYTE,   //3 = n de vertices
                  reinterpret_cast<GLvoid *>(0));
-
-  /*glUniformMatrix4fv(MatrixId, 1, GL_FALSE, glm::value_ptr(M));
-  glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_BYTE,    
-                 reinterpret_cast<GLvoid *>(0));
-
-*/
 
   glUniformMatrix4fv(MatrixId, 1, GL_FALSE, glm::value_ptr(M));
   glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_BYTE, reinterpret_cast<GLvoid*>(3*sizeof(Indices[0]))); //6 pq sao "2 triangulos"
   
   glUniformMatrix4fv(MatrixId, 1, GL_FALSE, glm::value_ptr(L));
   glDrawElements(GL_TRIANGLES, 12, GL_UNSIGNED_BYTE, reinterpret_cast<GLvoid*>(9 * sizeof(Indices[0])));
+  */
 
+  //small triangle 1
+  /*
+  glUniformMatrix4fv(MatrixId, 1, GL_FALSE, glm::value_ptr(I));
+  glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_BYTE,  
+      reinterpret_cast<GLvoid*>(0)); 
+  glUniformMatrix4fv(MatrixId, 1, GL_FALSE, glm::value_ptr(R));
+  glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_BYTE, 
+      reinterpret_cast<GLvoid*>(0));
+*/
+  //small triangle 2
+  /*
+  glUniformMatrix4fv(MatrixId, 1, GL_FALSE, glm::value_ptr(I));
+  glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_BYTE,
+      reinterpret_cast<GLvoid*>(0));
+  glUniformMatrix4fv(MatrixId, 1, GL_FALSE, glm::value_ptr(R));
+  glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_BYTE,
+      reinterpret_cast<GLvoid*>(0));
+ */
+
+  //medium triangle
+  /*
+  glUniformMatrix4fv(MatrixId, 1, GL_FALSE, glm::value_ptr(C));
+  glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_BYTE,
+      reinterpret_cast<GLvoid*>(0));
+  glUniformMatrix4fv(MatrixId, 1, GL_FALSE, glm::value_ptr(C2));
+  glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_BYTE,
+      reinterpret_cast<GLvoid*>(0));
+  glUniformMatrix4fv(MatrixId, 1, GL_FALSE, glm::value_ptr(I));
+  glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_BYTE, reinterpret_cast<GLvoid*>(3 * sizeof(Indices[0])));
+  */
+  //big triangle 1 (2 medium triangles)
+  glUniformMatrix4fv(MatrixId, 1, GL_FALSE, glm::value_ptr(C));
+  glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_BYTE,
+      reinterpret_cast<GLvoid*>(0));
+  glUniformMatrix4fv(MatrixId, 1, GL_FALSE, glm::value_ptr(C2));
+  glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_BYTE,
+      reinterpret_cast<GLvoid*>(0));
+  glUniformMatrix4fv(MatrixId, 1, GL_FALSE, glm::value_ptr(I));
+  glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_BYTE, reinterpret_cast<GLvoid*>(3 * sizeof(Indices[0])));
+
+  glUniformMatrix4fv(MatrixId, 1, GL_FALSE, glm::value_ptr(C*R));
+  glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_BYTE,
+      reinterpret_cast<GLvoid*>(0));
+  glUniformMatrix4fv(MatrixId, 1, GL_FALSE, glm::value_ptr(R));
+  glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_BYTE, reinterpret_cast<GLvoid*>(3 * sizeof(Indices[0])));
+  glUniformMatrix4fv(MatrixId, 1, GL_FALSE, glm::value_ptr(C3*R));
+  glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_BYTE,
+      reinterpret_cast<GLvoid*>(0));
+
+  //big triangle 2 (2 medium triangles)
+  /*
+  glUniformMatrix4fv(MatrixId, 1, GL_FALSE, glm::value_ptr(C));
+  glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_BYTE,
+      reinterpret_cast<GLvoid*>(0));
+  glUniformMatrix4fv(MatrixId, 1, GL_FALSE, glm::value_ptr(C2));
+  glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_BYTE,
+      reinterpret_cast<GLvoid*>(0));
+  glUniformMatrix4fv(MatrixId, 1, GL_FALSE, glm::value_ptr(I));
+  glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_BYTE, reinterpret_cast<GLvoid*>(3 * sizeof(Indices[0])));
+
+  glUniformMatrix4fv(MatrixId, 1, GL_FALSE, glm::value_ptr(C * R));
+  glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_BYTE,
+      reinterpret_cast<GLvoid*>(0));
+  glUniformMatrix4fv(MatrixId, 1, GL_FALSE, glm::value_ptr(R));
+  glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_BYTE, reinterpret_cast<GLvoid*>(3 * sizeof(Indices[0])));
+  glUniformMatrix4fv(MatrixId, 1, GL_FALSE, glm::value_ptr(C3 * R));
+  glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_BYTE,
+      reinterpret_cast<GLvoid*>(0));
+*/
+  /*
+  glUniformMatrix4fv(MatrixId, 1, GL_FALSE, glm::value_ptr(I));
+  glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_BYTE,   //3 = n de vertices
+      reinterpret_cast<GLvoid*>(0));
+*/
   Shaders->unbind();
   glBindVertexArray(0);
 }
