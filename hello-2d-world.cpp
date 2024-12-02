@@ -163,9 +163,9 @@ const glm::mat4 T1 = glm::translate(glm::vec3(sqrt(0.125f)/2, 0.0f, 0.0f));
 const glm::mat4 T2 = glm::translate(glm::vec3(-sqrt(0.125f) / 2, 0.0f, 0.0f));
 const glm::mat4 Z3 = glm::translate(glm::vec3(0.5f,-0.5f- sqrt(0.125f)/2,0.0f));
 const glm::mat4 L1 = glm::translate(glm::vec3(0.0f, -0.5f, 0.0f));
-const glm::mat4 K1 = glm::translate(glm::vec3(0.0f,-1.0f- sqrt(0.125f) / 2-0.5, 0.0f));
+const glm::mat4 K1 = glm::translate(glm::vec3(-0.11f,-1.0f- sqrt(0.125f) / 2-0.39, 0.0f));
 const glm::mat4 P1 = glm::translate(glm::vec3(-sqrt(0.125) / 2-0.075, -1.0f - sqrt(0.125) / 2-0.25, 0.0f));
-const glm::mat4 B1 = glm::translate(glm::vec3(0.5f, -0.5f - sqrt(0.125) / 2 , 0.0f));
+const glm::mat4 B1 = glm::translate(glm::vec3(0.4f, -0.4f - sqrt(0.125) / 2 , 0.0f));
 
 //const glm::mat4 R4 = glm::rotate(I, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f)) * glm::scale(glm::vec3(1.0f, 1.0f, -1.0f));
 //const glm::mat4 R4 = glm::rotate(I, glm::radians(180.0f), glm::vec3(1.0f, 1.0f, 0.0f));
