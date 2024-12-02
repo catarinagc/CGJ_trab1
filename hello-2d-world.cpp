@@ -68,26 +68,16 @@ typedef struct {
 } Vertex;
 
 const Vertex Vertices[] = {
-/*
-    {{0.0f, 0.0f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}},
-    {{2.0f, 0.0f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}},
-    {{2.0f, 2.0f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}},
-    {{0.0f, 2.0f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}},
-*/
-/*    {{0.25f, 0.25f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}},
-    {{0.75f, 0.25f, 0.0f, 1.0f}, {0.0f, 1.0f, 0.0f, 1.0f}},
-    {{0.50f, 0.75f, 0.0f, 1.0f}, {0.0f, 0.0f, 1.0f, 1.0f}},
-*/
     //right triangle
     {{0.0f, 0.0f, 0.0f, 1.0f}, {1.0f, 1.0f, 1.0f, 1.0f}},
     {{0.25f, 0.0f, 0.0f, 1.0f}, {1.0f, 1.0f, 1.0f, 1.0f}},
     {{0.0f, 0.25f, 0.0f, 1.0f}, {1.0f, 1.0f, 1.0f, 1.0f}},
 
     //square
-    {{0.0f, 0.0f, 0.0f, 1.0f}, {1.0f, 1.0f, 1.0f, 1.0f}},
-    {{0.25f, 0.0f, 0.0f, 1.0f}, {1.0f, 1.0f, 1.0f, 1.0f}},
-    {{0.25f, 0.25f, 0.0f, 1.0f}, {1.0f, 1.0f, 1.0f, 1.0f}},
-    {{0.0f, 0.25f, 0.0f, 1.0f}, {1.0f, 1.0f, 1.0f, 1.0f}},
+    {{-0.125f, -0.125f, 0.0f, 1.0f}, {1.0f, 1.0f, 1.0f, 1.0f}},
+    {{0.125f, -0.125f, 0.0f, 1.0f}, {1.0f, 1.0f, 1.0f, 1.0f}},
+    {{-0.125f, 0.125f, 0.0f, 1.0f}, {1.0f, 1.0f, 1.0f, 1.0f}},
+    {{0.125f, 0.125f, 0.0f, 1.0f}, {1.0f, 1.0f, 1.0f, 1.0f}},
 
     //parallelogram
     {{0.0f, 0.25f, 0.0f, 1.0f}, {1.0f, 1.0f, 1.0f, 1.0f}},
@@ -99,21 +89,9 @@ const Vertex Vertices[] = {
 };
 
 const GLubyte Indices[] = {0,1,2,
-                           3,5,6,3,4,5,
+                           3,4,5,4,6,5,
                            10,8,7,10,9,8,10,11,9,11,12,9}; //indice dos vertices no array Vertices[]
 
-/*const Vertex RightTriangleVertices[] = {
-    {{0.0f, 0.0f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}},
-    {{0.5f, 0.0f, 0.0f, 1.0f}, {0.0f, 1.0f, 0.0f, 1.0f}},
-    {{0.0f, 0.5f, 0.0f, 1.0f}, {0.0f, 0.0f, 1.0f, 1.0f}}
-};
-
-const Vertex SquareVertices[] = {
-    {{0.0f, 0.0f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}},
-    {{0.5f, 0.0f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}},
-    {{0.5f, 0.5f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}},
-    {{0.0f, 0.5f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}}
-}; */
 
 void MyApp::createBufferObjects() {
   glGenVertexArrays(1, &VaoId);
@@ -155,16 +133,40 @@ void MyApp::destroyBufferObjects() {
 ////////////////////////////////////////////////////////////////////////// SCENE
 
 const glm::mat4 I(1.0f);
+const glm::mat4 GS = glm::scale(I, glm::vec3(0.5f, 0.5f, 1.0f));
 const glm::mat4 M = glm::translate(glm::vec3(-1.0f, -1.0f, 0.0f));
 const glm::mat4 L = glm::translate(glm::vec3(-1.0f, 0.0f, 0.0f));
 const glm::mat4 M1 = glm::translate(glm::vec3(0.0f, -0.5f, 0.0f));
 glm::mat4 R = glm::rotate(I, glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-glm::mat4 Transform = R * M1;
-const glm::mat4 C = glm::translate(glm::vec3(0.0f, 0.25f, 0.0f));
-const glm::mat4 C2 = glm::translate(glm::vec3(0.25f, 0.0f, 0.0f));
+//const glm::mat4 C = glm::translate(glm::vec3(0.0f, 0.25f, 0.0f));
+const glm::mat4 C = glm::translate(glm::vec3(0.0f, 0.125f, 0.0f));
+const glm::mat4 H = glm::translate(glm::vec3(0.0f, 0.25f, 0.0f));
+const glm::mat4 H1 = glm::translate(glm::vec3(0.125f, 0.125f, 0.0f));
+const glm::mat4 H2 = glm::translate(glm::vec3(0.25f, 0.0f, 0.0f));
+//const glm::mat4 C2 = glm::translate(glm::vec3(0.25f, 0.0f, 0.0f));
+const glm::mat4 C2 = glm::translate(glm::vec3(0.25f, -0.125f, 0.0f));
+const glm::mat4 Z1 = glm::translate(glm::vec3(0.0f, 0.5f, 0.0f));
+const glm::mat4 Z2 = glm::translate(glm::vec3(0.0f, 0.5f, 0.0f));
+const glm::mat4 C21 = glm::translate(glm::vec3(0.125f, 0.0f, 0.0f));
+const glm::mat4 C22 = glm::translate(glm::vec3(-0.125f, 0.0f, 0.0f));
+const glm::mat4 T = glm::translate(glm::vec3(0.25f,0.0f,0.0f));
 const glm::mat4 S = glm::scale(I, glm::vec3(2.0f, 2.0f, 1.0f));
 const glm::mat4 C3 = glm::translate(glm::vec3(-0.25f, 0.0f, 0.0f));
 const glm::mat4 Ry = glm::rotate(I, glm::radians(45.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+const glm::mat4 R1 = glm::rotate(I, glm::radians(45.0f), glm::vec3(0.0f, 0.0f, -1.0f));
+const glm::mat4 R2 = glm::rotate(I, glm::radians(135.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+const glm::mat4 R3 = glm::rotate(I, glm::radians(225.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+const glm::mat4 R5 = glm::rotate(I, glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+const glm::mat4 R6 = glm::rotate(I, glm::radians(90.0f), glm::vec3(0.0f, 0.0f, -1.0f));
+const glm::mat4 R8 = glm::rotate(I, glm::radians(180.0f), glm::vec3(0.0f, 0.0f, -1.0f));
+const glm::mat4 T1 = glm::translate(glm::vec3(sqrt(0.125f)/2, 0.0f, 0.0f));
+const glm::mat4 T2 = glm::translate(glm::vec3(-sqrt(0.125f) / 2, 0.0f, 0.0f));
+const glm::mat4 Z3 = glm::translate(glm::vec3(0.5f,-0.5f- sqrt(0.125f)/2,0.0f));
+const glm::mat4 L1 = glm::translate(glm::vec3(0.0f, -0.5f, 0.0f));
+const glm::mat4 K1 = glm::translate(glm::vec3(0.125f, -(0.5-sqrt(0.125)), 0.0f));
+const glm::mat4 P1 = glm::translate(glm::vec3(0.0f, -1.0f -sqrt(0.125)/2, 0.0f));
+//const glm::mat4 R4 = glm::rotate(I, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f)) * glm::scale(glm::vec3(1.0f, 1.0f, -1.0f));
+//const glm::mat4 R4 = glm::rotate(I, glm::radians(180.0f), glm::vec3(1.0f, 1.0f, 0.0f));
 
 void drawSmallTriangle(GLint MatrixId, glm::mat4 Mt,glm::mat4 Mx, GLint GroupID, int group) {
     //glm::mat4 Mt = translationMatrix * rotationMatrix * scaleMatrix;
@@ -188,14 +190,16 @@ void drawSquare(GLint MatrixId, glm::mat4 Mt, glm::mat4 Mx, GLint GroupID, int g
 }
 
 void drawMediumTriangle(GLint MatrixId, glm::mat4 Mx, GLint GroupID, int group) {
-    drawSmallTriangle(MatrixId, C*I*I, Mx, GroupID, group);
-    drawSquare(MatrixId,I,Mx, GroupID, group);
-    drawSmallTriangle(MatrixId, C2*I*I,Mx, GroupID, group);
+    drawSmallTriangle(MatrixId,H* I*I, Mx, GroupID, group); //C
+    drawSquare(MatrixId,H1,Mx, GroupID, group);
+    drawSmallTriangle(MatrixId, H2*I*I,Mx, GroupID, group); //C2
 }
 
 void drawBigTriangle(GLint MatrixId, glm::mat4 Mx, GLint GroupID, int group) {
-    drawMediumTriangle(MatrixId,Mx*I, GroupID, group);
-    drawMediumTriangle(MatrixId, Mx*I*I*R, GroupID, group);
+    //drawMediumTriangle(MatrixId,Mx*T, GroupID, group);
+    //drawMediumTriangle(MatrixId, Mx*R, GroupID, group);
+    drawMediumTriangle(MatrixId, Mx *Z2*R8, GroupID, group);
+    drawMediumTriangle(MatrixId, Mx *Z1*R*R8, GroupID, group);
 }
 
 void drawParallelogram(GLint MatrixId, glm::mat4 Mt, GLint GroupID, int group) {
@@ -210,14 +214,24 @@ void MyApp::drawScene() { //onde defino a matriz de transformação e o que vou de
   glBindVertexArray(VaoId);
   Shaders->bind();
   //translationMatrix * rotationMatrix * scaleMatrix;
-  
-  //drawSmallTriangle(MatrixId, I, S, C, GroupID);
-  //drawSmallTriangle(MatrixId, I, S, C2, GroupID);
-  drawSquare(MatrixId, I,I, GroupID,2);
-  //drawMediumTriangle(MatrixId,I, GroupID);
-  //drawBigTriangle(MatrixId, I, GroupID);
-  drawParallelogram(MatrixId, Ry*S, GroupID,1);
+  //drawMediumTriangle(MatrixId, I, GroupID, 3);
+  drawSquare(MatrixId,I,GS*Ry, GroupID,2);
+  drawSmallTriangle(MatrixId, I, GS*T1*R1, GroupID,1);
+  drawSmallTriangle(MatrixId, I, GS*T2*R2, GroupID, 4);
+  drawBigTriangle(MatrixId, GS*Z3*R5, GroupID, 1);
+  drawBigTriangle(MatrixId, GS*P1*R6, GroupID, 8); //R6
 
+
+  //drawMediumTriangle(MatrixId,R3,GroupID,3);
+  //drawBigTriangle(MatrixId, R5, GroupID,5);
+  //drawBigTriangle(MatrixId, R6, GroupID, 5);
+  
+  //falta rotação
+  //drawParallelogram(MatrixId, R4, GroupID,1);
+  
+  //drawSquare(MatrixId, I, I, GroupID, 5);
+  //drawMediumTriangle(MatrixId, K1*R3*GS, GroupID, 3); //tirar z neste tb o de cima
+  //drawSquare(MatrixId, I,I, GroupID, 6);
   Shaders->unbind();
   glBindVertexArray(0);
 }
