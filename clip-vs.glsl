@@ -13,7 +13,6 @@ float random(vec3 seed) {
 
 void main(void) {
     gl_Position = Matrix * inPosition;
-  //  exColor = inColor;
 
     exColor = vec4(
         random(GroupID + vec3(0.0)),

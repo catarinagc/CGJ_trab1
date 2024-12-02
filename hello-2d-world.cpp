@@ -82,12 +82,12 @@ const Vertex Vertices[] = {
     {{0.125f, 0.125f, 0.0f, 1.0f}, {1.0f, 1.0f, 1.0f, 1.0f}},
 
     //parallelogram
-    {{0.0f, 0.0f, 0.0f, 1.0f}, {1.0f, 1.0f, 1.0f, 1.0f}},
+    {{0.0f, 0.0f, 0.0f, 1.0f}, {1.0f, 1.0f, 1.0f, 1.0f}}, //0
     {{0.25f, 0.25f, 0.0f, 1.0f}, {1.0f, 1.0f, 1.0f, 1.0f}},
     {{0.5f, 0.25f, 0.0f, 1.0f}, {1.0f, 1.0f, 1.0f, 1.0f}},
     {{0.75f, 0.25f, 0.0f, 1.0f}, {1.0f, 1.0f, 1.0f, 1.0f}},
     {{0.5f, 0.0f, 0.0f, 1.0f}, {1.0f, 1.0f, 1.0f, 1.0f}},
-    {{0.25f, 0.0f, 0.0f, 1.0f}, {1.0f, 1.0f, 1.0f, 1.0f}}
+    {{0.25f, 0.0f, 0.0f, 1.0f}, {1.0f, 1.0f, 1.0f, 1.0f}} //1
 };
 
 const GLubyte Indices[] = {0,1,2,
@@ -133,52 +133,53 @@ void MyApp::destroyBufferObjects() {
 
 ////////////////////////////////////////////////////////////////////////// SCENE
 
-const glm::mat4 I(1.0f);
-const glm::mat4 GS = glm::scale(I, glm::vec3(0.5f, 0.5f, 1.0f)); //scale matrix used for every object
+// Common constants
+const float sqrt125_half = sqrt(0.125f) / 2.0f;
+const glm::mat4 I = glm::mat4(1.0f);
 
-const glm::mat4 R = glm::rotate(I, glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-const glm::mat4 H = glm::translate(glm::vec3(0.0f, 0.25f, 0.0f));
-const glm::mat4 H1 = glm::translate(glm::vec3(0.125f, 0.125f, 0.0f));
-const glm::mat4 H2 = glm::translate(glm::vec3(0.25f, 0.0f, 0.0f));
-const glm::mat4 Z1 = glm::translate(glm::vec3(0.0f, 0.5f, 0.0f));
-const glm::mat4 Ry = glm::rotate(I, glm::radians(45.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-const glm::mat4 R1 = glm::rotate(I, glm::radians(45.0f), glm::vec3(0.0f, 0.0f, -1.0f));
-const glm::mat4 R2 = glm::rotate(I, glm::radians(135.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-const glm::mat4 R3 = glm::rotate(I, glm::radians(225.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-const glm::mat4 R5 = glm::rotate(I, glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-const glm::mat4 R6 = glm::rotate(I, glm::radians(90.0f), glm::vec3(0.0f, 0.0f, -1.0f));
-const glm::mat4 R8 = glm::rotate(I, glm::radians(180.0f), glm::vec3(0.0f, 0.0f, -1.0f));
-const glm::mat4 T1 = glm::translate(glm::vec3(sqrt(0.125f)/2, 0.0f, 0.0f));
-const glm::mat4 T2 = glm::translate(glm::vec3(-sqrt(0.125f) / 2, 0.0f, 0.0f));
-const glm::mat4 Z3 = glm::translate(glm::vec3(0.5f,-0.5f- sqrt(0.125f)/2,0.0f));
-const glm::mat4 K1 = glm::translate(glm::vec3(-0.11f,-1.0f- sqrt(0.125f) / 2-0.39, 0.0f));
-const glm::mat4 P1 = glm::translate(glm::vec3(-sqrt(0.125) / 2-0.075, -1.0f - sqrt(0.125) / 2-0.25, 0.0f));
-const glm::mat4 B1 = glm::translate(glm::vec3(0.4f, -0.4f - sqrt(0.125) / 2 , 0.0f));
+//Scale matrix used for every object
+const glm::mat4 GS = glm::scale(I, glm::vec3(0.5f, 0.5f, 1.0f));
 
-static void drawSmallTriangle(GLint MatrixId, glm::mat4 Mt,glm::mat4 Mx, GLint GroupID, int group) {
-    glm::mat4 Mf = Mx * Mt;
-    glUniformMatrix4fv(MatrixId, 1, GL_FALSE, glm::value_ptr(Mf));
+// Rotation matrices
+const glm::mat4 R90_pos = glm::rotate(I, glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f)); 
+const glm::mat4 R90_neg = glm::rotate(I, glm::radians(90.0f), glm::vec3(0.0f, 0.0f, -1.0f));
+const glm::mat4 R45_pos = glm::rotate(I, glm::radians(45.0f), glm::vec3(0.0f, 0.0f, 1.0f)); 
+const glm::mat4 R45_neg = glm::rotate(I, glm::radians(45.0f), glm::vec3(0.0f, 0.0f, -1.0f));
+
+// Translation matrices
+const glm::mat4 T0 = glm::translate(glm::vec3(0.0f, 0.25f, 0.0f));
+const glm::mat4 T1 = glm::translate(glm::vec3(sqrt125_half, 0.0f, 0.0f));
+const glm::mat4 T2 = glm::translate(glm::vec3(-sqrt125_half, 0.0f, 0.0f));
+const glm::mat4 T3 = glm::translate(glm::vec3(0.125f, 0.125f, 0.0f));
+const glm::mat4 T4 = glm::translate(glm::vec3(0.25f, 0.0f, 0.0f));
+const glm::mat4 T5 = glm::translate(glm::vec3(0.0f, 0.5f, 0.0f));
+const glm::mat4 T6 = glm::translate(glm::vec3(0.5f,-0.5f - sqrt125_half,0.0f));
+const glm::mat4 T7 = glm::translate(glm::vec3(-0.11f,-1.39f - sqrt125_half, 0.0f));
+const glm::mat4 T8 = glm::translate(glm::vec3(-sqrt125_half -0.075, -1.25f - sqrt125_half, 0.0f));
+const glm::mat4 T9 = glm::translate(glm::vec3(0.4f, -0.4f - sqrt125_half, 0.0f));
+
+static void drawSmallTriangle(GLint MatrixId, glm::mat4 Mt, glm::mat4 Mx, GLint GroupID, int group) {
+    glUniformMatrix4fv(MatrixId, 1, GL_FALSE, glm::value_ptr(Mx*Mt));
     glUniform1i(GroupID, nRand*group);
     glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_BYTE,
         reinterpret_cast<GLvoid*>(0));
 }
 
 static void drawSquare(GLint MatrixId, glm::mat4 Mt, glm::mat4 Mx, GLint GroupID, int group) {
-    glm::mat4 Mf = Mx * Mt;
-    glUniformMatrix4fv(MatrixId, 1, GL_FALSE, glm::value_ptr(Mf));
+    glUniformMatrix4fv(MatrixId, 1, GL_FALSE, glm::value_ptr(Mx*Mt));
     glUniform1i(GroupID, nRand*group);
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_BYTE, reinterpret_cast<GLvoid*>(3 * sizeof(Indices[0])));
 }
 
 static void drawMediumTriangle(GLint MatrixId, glm::mat4 Mx, GLint GroupID, int group) {
-    drawSmallTriangle(MatrixId,H* I*I, Mx, GroupID, group);
-    drawSquare(MatrixId,H1,Mx, GroupID, group);
-    drawSmallTriangle(MatrixId, H2*I*I,Mx, GroupID, group);
+    drawSmallTriangle(MatrixId, T0, Mx, GroupID, group);
+    drawSquare(MatrixId, T3, Mx, GroupID, group);
+    drawSmallTriangle(MatrixId, T4, Mx, GroupID, group);
 }
 
 static void drawBigTriangle(GLint MatrixId, glm::mat4 Mx, GLint GroupID, int group) {
-    drawMediumTriangle(MatrixId, Mx *Z1*R8, GroupID, group);
-    drawMediumTriangle(MatrixId, Mx *Z1*R*R8, GroupID, group);
+    drawMediumTriangle(MatrixId, Mx * T5 * R90_neg * R90_neg, GroupID, group);
+    drawMediumTriangle(MatrixId, Mx * T5 * R90_pos * R90_neg * R90_neg, GroupID, group);
 }
 
 static void drawParallelogram(GLint MatrixId, glm::mat4 Mt, GLint GroupID, int group) {
@@ -193,13 +194,13 @@ void MyApp::drawScene() {
   glBindVertexArray(VaoId);
   Shaders->bind();
 
-  drawSquare(MatrixId,I, GS*Ry, GroupID,1);
-  drawSmallTriangle(MatrixId, I, GS*T1*R1, GroupID,2);
-  drawSmallTriangle(MatrixId, I, GS*T2*R2, GroupID, 3);
-  drawBigTriangle(MatrixId, GS*Z3*R5, GroupID, 4);
-  drawBigTriangle(MatrixId, GS*P1*R6, GroupID, 5);
-  drawMediumTriangle(MatrixId, GS * K1 * R3, GroupID, 6);
-  drawParallelogram(MatrixId, GS*B1, GroupID, 7);
+  drawSquare(MatrixId,I, GS* R45_pos, GroupID,1);
+  drawSmallTriangle(MatrixId, I, GS * T1 * R45_neg, GroupID,2);
+  drawSmallTriangle(MatrixId, I, GS * T2 * R45_pos * R90_pos, GroupID, 3);
+  drawBigTriangle(MatrixId, GS * T6 * R90_pos, GroupID, 4);
+  drawBigTriangle(MatrixId, GS * T8 * R90_neg, GroupID, 5);
+  drawMediumTriangle(MatrixId, GS * T7 * R45_pos * R90_pos * R90_pos, GroupID, 6);
+  drawParallelogram(MatrixId, GS * T9, GroupID, 7);
 
   Shaders->unbind();
   glBindVertexArray(0);
