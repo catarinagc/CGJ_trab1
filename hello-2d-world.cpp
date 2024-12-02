@@ -166,61 +166,41 @@ const glm::mat4 S = glm::scale(I, glm::vec3(2.0f, 2.0f, 1.0f));
 const glm::mat4 C3 = glm::translate(glm::vec3(-0.25f, 0.0f, 0.0f));
 const glm::mat4 Ry = glm::rotate(I, glm::radians(45.0f), glm::vec3(0.0f, 0.0f, 1.0f));
 
-/*
-glm::vec4 randColor() {
-    float randNum = rand() / RAND_MAX;
-    return glm::vec4(randNum,randNum,randNum,1.0f);
-}
-*/
-/*void updateColor(int startVertice, int endVertice, glm::vec4 color) {
-    for (int i = startVertice; i < endVertice; i++) {
-        Vertices[i].RGBA= color;
-    }
-} */
-/*
-void updateVertexColors(GLuint vbo, int vertexCount, const Vertex* vertices, glm::vec4 color) {
-    // Create a temporary array to hold updated vertices
-    Vertex updatedVertices[];
-    for (int i = 0; i < vertexCount; ++i) {
-        updatedVertices[i] = vertices[i];
-        // Update the color for each vertex
-        updatedVertices[i].RGBA[0] = color.r;
-        updatedVertices[i].RGBA[1] = color.g;
-        updatedVertices[i].RGBA[2] = color.b;
-        updatedVertices[i].RGBA[3] = color.a;
-    }
-
-    // Bind the buffer and update with the modified vertex data
-    glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    glBufferSubData(GL_ARRAY_BUFFER, 0, vertexCount * sizeof(Vertex), updatedVertices.data());
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-} */
-
-void drawSmallTriangle(GLint MatrixId, glm::mat4 rotationMatrix, glm::mat4 scaleMatrix, glm::mat4 translationMatrix, GLint GroupID) {
-    glUniformMatrix4fv(MatrixId, 1, GL_FALSE, glm::value_ptr(translationMatrix*rotationMatrix*scaleMatrix));
-    glUniform1i(GroupID, nRand);
+void drawSmallTriangle(GLint MatrixId, glm::mat4 Mt,glm::mat4 Mx, GLint GroupID, int group) {
+    //glm::mat4 Mt = translationMatrix * rotationMatrix * scaleMatrix;
+    //glm::mat4 Mx = M * I * S;
+    glm::mat4 Mf = Mx * Mt;
+    //glUniformMatrix4fv(MatrixId, 1, GL_FALSE, glm::value_ptr(translationMatrix*rotationMatrix*scaleMatrix));
+    glUniformMatrix4fv(MatrixId, 1, GL_FALSE, glm::value_ptr(Mf));
+    glUniform1i(GroupID, nRand*group);
     glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_BYTE,   //3 = n de vertices
         reinterpret_cast<GLvoid*>(0));
 }
 
-void drawSquare(GLint MatrixId, glm::mat4 rotationMatrix, glm::mat4 scaleMatrix, glm::mat4 translationMatrix) {
-    glUniformMatrix4fv(MatrixId, 1, GL_FALSE, glm::value_ptr(translationMatrix*  rotationMatrix * scaleMatrix));
+void drawSquare(GLint MatrixId, glm::mat4 Mt, glm::mat4 Mx, GLint GroupID, int group) {
+   // glm::mat4 Mt = translationMatrix * rotationMatrix * scaleMatrix;
+   // glm::mat4 Mx = M * I * S;
+    glm::mat4 Mf = Mx * Mt;
+    //glUniformMatrix4fv(MatrixId, 1, GL_FALSE, glm::value_ptr(translationMatrix*  rotationMatrix * scaleMatrix));
+    glUniformMatrix4fv(MatrixId, 1, GL_FALSE, glm::value_ptr(Mf));
+    glUniform1i(GroupID, nRand*group);
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_BYTE, reinterpret_cast<GLvoid*>(3 * sizeof(Indices[0])));
 }
 
-void drawMediumTriangle(GLint MatrixId, glm::mat4 rotationMatrix, glm::mat4 scaleMatrix, glm::mat4 translationMatrix) {
-    //drawSmallTriangle(MatrixId,rotationMatrix,scaleMatrix,C*translationMatrix);
-    drawSquare(MatrixId, rotationMatrix, scaleMatrix, translationMatrix);
-    //drawSmallTriangle(MatrixId, rotationMatrix, scaleMatrix, C2*translationMatrix);
+void drawMediumTriangle(GLint MatrixId, glm::mat4 Mx, GLint GroupID, int group) {
+    drawSmallTriangle(MatrixId, C*I*I, Mx, GroupID, group);
+    drawSquare(MatrixId,I,Mx, GroupID, group);
+    drawSmallTriangle(MatrixId, C2*I*I,Mx, GroupID, group);
 }
 
-void drawBigTriangle(GLint MatrixId, glm::mat4 rotationMatrix, glm::mat4 scaleMatrix, glm::mat4 translationMatrix) {
-    drawMediumTriangle(MatrixId,rotationMatrix,scaleMatrix, rotationMatrix);
-    drawMediumTriangle(MatrixId, rotationMatrix, R*scaleMatrix, rotationMatrix);
+void drawBigTriangle(GLint MatrixId, glm::mat4 Mx, GLint GroupID, int group) {
+    drawMediumTriangle(MatrixId,Mx*I, GroupID, group);
+    drawMediumTriangle(MatrixId, Mx*I*I*R, GroupID, group);
 }
 
-void drawParallelogram(GLint MatrixId, glm::mat4 rotationMatrix, glm::mat4 scaleMatrix, glm::mat4 translationMatrix) {
-    glUniformMatrix4fv(MatrixId, 1, GL_FALSE, glm::value_ptr(translationMatrix*rotationMatrix * scaleMatrix));
+void drawParallelogram(GLint MatrixId, glm::mat4 Mt, GLint GroupID, int group) {
+    glUniformMatrix4fv(MatrixId, 1, GL_FALSE, glm::value_ptr(Mt));
+    glUniform1i(GroupID, nRand*group);
     glDrawElements(GL_TRIANGLES, 12, GL_UNSIGNED_BYTE, reinterpret_cast<GLvoid*>(9 * sizeof(Indices[0])));
 }
 
@@ -229,12 +209,14 @@ void MyApp::drawScene() { //onde defino a matriz de transformação e o que vou de
 
   glBindVertexArray(VaoId);
   Shaders->bind();
+  //translationMatrix * rotationMatrix * scaleMatrix;
   
-  drawSmallTriangle(MatrixId, I, S, I, GroupID);
-  //drawMediumTriangle(MatrixId, I, I, I);
-  //drawBigTriangle(MatrixId, I, I, I);
-  //drawParallelogram(MatrixId, I, I, I);
-  //drawSquare(MatrixId,I,I,I);
+  //drawSmallTriangle(MatrixId, I, S, C, GroupID);
+  //drawSmallTriangle(MatrixId, I, S, C2, GroupID);
+  drawSquare(MatrixId, I,I, GroupID,2);
+  //drawMediumTriangle(MatrixId,I, GroupID);
+  //drawBigTriangle(MatrixId, I, GroupID);
+  drawParallelogram(MatrixId, Ry*S, GroupID,1);
 
   Shaders->unbind();
   glBindVertexArray(0);
