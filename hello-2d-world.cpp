@@ -80,17 +80,17 @@ const Vertex Vertices[] = {
     {{0.125f, 0.125f, 0.0f, 1.0f}, {1.0f, 1.0f, 1.0f, 1.0f}},
 
     //parallelogram
-    {{0.0f, 0.25f, 0.0f, 1.0f}, {1.0f, 1.0f, 1.0f, 1.0f}},
+    {{0.0f, 0.0f, 0.0f, 1.0f}, {1.0f, 1.0f, 1.0f, 1.0f}},
     {{0.25f, 0.25f, 0.0f, 1.0f}, {1.0f, 1.0f, 1.0f, 1.0f}},
     {{0.5f, 0.25f, 0.0f, 1.0f}, {1.0f, 1.0f, 1.0f, 1.0f}},
-    {{0.25f, 0.0f, 0.0f, 1.0f}, {1.0f, 1.0f, 1.0f, 1.0f}},
+    {{0.75f, 0.25f, 0.0f, 1.0f}, {1.0f, 1.0f, 1.0f, 1.0f}},
     {{0.5f, 0.0f, 0.0f, 1.0f}, {1.0f, 1.0f, 1.0f, 1.0f}},
-    {{0.75f, 0.0f, 0.0f, 1.0f}, {1.0f, 1.0f, 1.0f, 1.0f}}
+    {{0.25f, 0.0f, 0.0f, 1.0f}, {1.0f, 1.0f, 1.0f, 1.0f}}
 };
 
 const GLubyte Indices[] = {0,1,2,
                            3,4,5,4,6,5,
-                           10,8,7,10,9,8,10,11,9,11,12,9}; //indice dos vertices no array Vertices[]
+                           7,12,8,12,9,8,12,11,9,11,10,9}; //indice dos vertices no array Vertices[]
 
 
 void MyApp::createBufferObjects() {
@@ -163,8 +163,10 @@ const glm::mat4 T1 = glm::translate(glm::vec3(sqrt(0.125f)/2, 0.0f, 0.0f));
 const glm::mat4 T2 = glm::translate(glm::vec3(-sqrt(0.125f) / 2, 0.0f, 0.0f));
 const glm::mat4 Z3 = glm::translate(glm::vec3(0.5f,-0.5f- sqrt(0.125f)/2,0.0f));
 const glm::mat4 L1 = glm::translate(glm::vec3(0.0f, -0.5f, 0.0f));
-const glm::mat4 K1 = glm::translate(glm::vec3(0.125f, -(0.5-sqrt(0.125)), 0.0f));
-const glm::mat4 P1 = glm::translate(glm::vec3(0.0f, -1.0f -sqrt(0.125)/2, 0.0f));
+const glm::mat4 K1 = glm::translate(glm::vec3(0.0f,-1.0f- sqrt(0.125f) / 2-0.5, 0.0f));
+const glm::mat4 P1 = glm::translate(glm::vec3(-sqrt(0.125) / 2-0.075, -1.0f - sqrt(0.125) / 2-0.25, 0.0f));
+const glm::mat4 B1 = glm::translate(glm::vec3(0.5f, -0.5f - sqrt(0.125) / 2 , 0.0f));
+
 //const glm::mat4 R4 = glm::rotate(I, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f)) * glm::scale(glm::vec3(1.0f, 1.0f, -1.0f));
 //const glm::mat4 R4 = glm::rotate(I, glm::radians(180.0f), glm::vec3(1.0f, 1.0f, 0.0f));
 
@@ -220,17 +222,17 @@ void MyApp::drawScene() { //onde defino a matriz de transformação e o que vou de
   drawSmallTriangle(MatrixId, I, GS*T2*R2, GroupID, 4);
   drawBigTriangle(MatrixId, GS*Z3*R5, GroupID, 1);
   drawBigTriangle(MatrixId, GS*P1*R6, GroupID, 8); //R6
-
-
+  drawMediumTriangle(MatrixId, GS * K1 * R3, GroupID, 3);
+  drawParallelogram(MatrixId, GS*B1, GroupID, 3);
   //drawMediumTriangle(MatrixId,R3,GroupID,3);
   //drawBigTriangle(MatrixId, R5, GroupID,5);
   //drawBigTriangle(MatrixId, R6, GroupID, 5);
-  
   //falta rotação
   //drawParallelogram(MatrixId, R4, GroupID,1);
+  //drawSquare(MatrixId, I,I,GroupID, 2);
   
   //drawSquare(MatrixId, I, I, GroupID, 5);
-  //drawMediumTriangle(MatrixId, K1*R3*GS, GroupID, 3); //tirar z neste tb o de cima
+  //drawMediumTriangle(MatrixId,GS*K1* R3, GroupID, 3); //tirar z neste tb o de cima
   //drawSquare(MatrixId, I,I, GroupID, 6);
   Shaders->unbind();
   glBindVertexArray(0);
