@@ -4,6 +4,8 @@
 // A "Hello 2D World" of Modern OpenGL.
 //
 // Copyright (c) 2013-24 by Carlos Martinho
+// 
+// Catarina Gonçalves Costa ist1112377
 //
 // INTRODUCES:
 // GL PIPELINE, mglShader.hpp, mglConventions.hpp
@@ -90,14 +92,13 @@ const Vertex Vertices[] = {
 
 const GLubyte Indices[] = {0,1,2,
                            3,4,5,4,6,5,
-                           7,12,8,12,9,8,12,11,9,11,10,9}; //indice dos vertices no array Vertices[]
-
+                           7,12,8,12,9,8,12,11,9,11,10,9};
 
 void MyApp::createBufferObjects() {
   glGenVertexArrays(1, &VaoId);
-  glBindVertexArray(VaoId); //vertex array object id
+  glBindVertexArray(VaoId);
   {
-    glGenBuffers(2, VboId); //vertex buffer object id
+    glGenBuffers(2, VboId);
 
     glBindBuffer(GL_ARRAY_BUFFER, VboId[0]);
     {
@@ -138,12 +139,10 @@ const glm::mat4 M = glm::translate(glm::vec3(-1.0f, -1.0f, 0.0f));
 const glm::mat4 L = glm::translate(glm::vec3(-1.0f, 0.0f, 0.0f));
 const glm::mat4 M1 = glm::translate(glm::vec3(0.0f, -0.5f, 0.0f));
 glm::mat4 R = glm::rotate(I, glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-//const glm::mat4 C = glm::translate(glm::vec3(0.0f, 0.25f, 0.0f));
 const glm::mat4 C = glm::translate(glm::vec3(0.0f, 0.125f, 0.0f));
 const glm::mat4 H = glm::translate(glm::vec3(0.0f, 0.25f, 0.0f));
 const glm::mat4 H1 = glm::translate(glm::vec3(0.125f, 0.125f, 0.0f));
 const glm::mat4 H2 = glm::translate(glm::vec3(0.25f, 0.0f, 0.0f));
-//const glm::mat4 C2 = glm::translate(glm::vec3(0.25f, 0.0f, 0.0f));
 const glm::mat4 C2 = glm::translate(glm::vec3(0.25f, -0.125f, 0.0f));
 const glm::mat4 Z1 = glm::translate(glm::vec3(0.0f, 0.5f, 0.0f));
 const glm::mat4 Z2 = glm::translate(glm::vec3(0.0f, 0.5f, 0.0f));
@@ -167,39 +166,28 @@ const glm::mat4 K1 = glm::translate(glm::vec3(-0.11f,-1.0f- sqrt(0.125f) / 2-0.3
 const glm::mat4 P1 = glm::translate(glm::vec3(-sqrt(0.125) / 2-0.075, -1.0f - sqrt(0.125) / 2-0.25, 0.0f));
 const glm::mat4 B1 = glm::translate(glm::vec3(0.4f, -0.4f - sqrt(0.125) / 2 , 0.0f));
 
-//const glm::mat4 R4 = glm::rotate(I, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f)) * glm::scale(glm::vec3(1.0f, 1.0f, -1.0f));
-//const glm::mat4 R4 = glm::rotate(I, glm::radians(180.0f), glm::vec3(1.0f, 1.0f, 0.0f));
-
 void drawSmallTriangle(GLint MatrixId, glm::mat4 Mt,glm::mat4 Mx, GLint GroupID, int group) {
-    //glm::mat4 Mt = translationMatrix * rotationMatrix * scaleMatrix;
-    //glm::mat4 Mx = M * I * S;
     glm::mat4 Mf = Mx * Mt;
-    //glUniformMatrix4fv(MatrixId, 1, GL_FALSE, glm::value_ptr(translationMatrix*rotationMatrix*scaleMatrix));
     glUniformMatrix4fv(MatrixId, 1, GL_FALSE, glm::value_ptr(Mf));
     glUniform1i(GroupID, nRand*group);
-    glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_BYTE,   //3 = n de vertices
+    glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_BYTE,
         reinterpret_cast<GLvoid*>(0));
 }
 
 void drawSquare(GLint MatrixId, glm::mat4 Mt, glm::mat4 Mx, GLint GroupID, int group) {
-   // glm::mat4 Mt = translationMatrix * rotationMatrix * scaleMatrix;
-   // glm::mat4 Mx = M * I * S;
     glm::mat4 Mf = Mx * Mt;
-    //glUniformMatrix4fv(MatrixId, 1, GL_FALSE, glm::value_ptr(translationMatrix*  rotationMatrix * scaleMatrix));
     glUniformMatrix4fv(MatrixId, 1, GL_FALSE, glm::value_ptr(Mf));
     glUniform1i(GroupID, nRand*group);
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_BYTE, reinterpret_cast<GLvoid*>(3 * sizeof(Indices[0])));
 }
 
 void drawMediumTriangle(GLint MatrixId, glm::mat4 Mx, GLint GroupID, int group) {
-    drawSmallTriangle(MatrixId,H* I*I, Mx, GroupID, group); //C
+    drawSmallTriangle(MatrixId,H* I*I, Mx, GroupID, group);
     drawSquare(MatrixId,H1,Mx, GroupID, group);
-    drawSmallTriangle(MatrixId, H2*I*I,Mx, GroupID, group); //C2
+    drawSmallTriangle(MatrixId, H2*I*I,Mx, GroupID, group);
 }
 
 void drawBigTriangle(GLint MatrixId, glm::mat4 Mx, GLint GroupID, int group) {
-    //drawMediumTriangle(MatrixId,Mx*T, GroupID, group);
-    //drawMediumTriangle(MatrixId, Mx*R, GroupID, group);
     drawMediumTriangle(MatrixId, Mx *Z2*R8, GroupID, group);
     drawMediumTriangle(MatrixId, Mx *Z1*R*R8, GroupID, group);
 }
@@ -210,30 +198,20 @@ void drawParallelogram(GLint MatrixId, glm::mat4 Mt, GLint GroupID, int group) {
     glDrawElements(GL_TRIANGLES, 12, GL_UNSIGNED_BYTE, reinterpret_cast<GLvoid*>(9 * sizeof(Indices[0])));
 }
 
-void MyApp::drawScene() { //onde defino a matriz de transformação e o que vou desenhar
+void MyApp::drawScene() {
   // Drawing directly in clip space
 
   glBindVertexArray(VaoId);
   Shaders->bind();
-  //translationMatrix * rotationMatrix * scaleMatrix;
-  //drawMediumTriangle(MatrixId, I, GroupID, 3);
-  drawSquare(MatrixId,I,GS*Ry, GroupID,2);
-  drawSmallTriangle(MatrixId, I, GS*T1*R1, GroupID,1);
-  drawSmallTriangle(MatrixId, I, GS*T2*R2, GroupID, 4);
-  drawBigTriangle(MatrixId, GS*Z3*R5, GroupID, 1);
-  drawBigTriangle(MatrixId, GS*P1*R6, GroupID, 8); //R6
-  drawMediumTriangle(MatrixId, GS * K1 * R3, GroupID, 3);
-  drawParallelogram(MatrixId, GS*B1, GroupID, 3);
-  //drawMediumTriangle(MatrixId,R3,GroupID,3);
-  //drawBigTriangle(MatrixId, R5, GroupID,5);
-  //drawBigTriangle(MatrixId, R6, GroupID, 5);
-  //falta rotação
-  //drawParallelogram(MatrixId, R4, GroupID,1);
-  //drawSquare(MatrixId, I,I,GroupID, 2);
-  
-  //drawSquare(MatrixId, I, I, GroupID, 5);
-  //drawMediumTriangle(MatrixId,GS*K1* R3, GroupID, 3); //tirar z neste tb o de cima
-  //drawSquare(MatrixId, I,I, GroupID, 6);
+
+  drawSquare(MatrixId,I,GS*Ry, GroupID,1);
+  drawSmallTriangle(MatrixId, I, GS*T1*R1, GroupID,2);
+  drawSmallTriangle(MatrixId, I, GS*T2*R2, GroupID, 3);
+  drawBigTriangle(MatrixId, GS*Z3*R5, GroupID, 4);
+  drawBigTriangle(MatrixId, GS*P1*R6, GroupID, 5);
+  drawMediumTriangle(MatrixId, GS * K1 * R3, GroupID, 6);
+  drawParallelogram(MatrixId, GS*B1, GroupID, 7);
+
   Shaders->unbind();
   glBindVertexArray(0);
 }
