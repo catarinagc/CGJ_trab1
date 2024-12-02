@@ -16,6 +16,9 @@
 #include <memory>
 #include <sstream>
 #include "../mgl/mgl.hpp"
+#include <time.h>
+
+int nRand;
 
 ////////////////////////////////////////////////////////////////////////// MYAPP
 
@@ -195,7 +198,7 @@ void updateVertexColors(GLuint vbo, int vertexCount, const Vertex* vertices, glm
 
 void drawSmallTriangle(GLint MatrixId, glm::mat4 rotationMatrix, glm::mat4 scaleMatrix, glm::mat4 translationMatrix, GLint GroupID) {
     glUniformMatrix4fv(MatrixId, 1, GL_FALSE, glm::value_ptr(translationMatrix*rotationMatrix*scaleMatrix));
-    glUniform1i(GroupID, 1);
+    glUniform1i(GroupID, nRand);
     glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_BYTE,   //3 = n de vertices
         reinterpret_cast<GLvoid*>(0));
 }
@@ -255,8 +258,10 @@ void MyApp::displayCallback(GLFWwindow *win, double elapsed) { drawScene(); }
 /////////////////////////////////////////////////////////////////////////// MAIN
 
 int main(int argc, char *argv[]) {
+    srand(time(NULL));
+    nRand = rand();
   mgl::Engine &engine = mgl::Engine::getInstance();
-  engine.setApp(new MyApp());
+  engine.setApp(new MyApp);
   engine.setOpenGL(4, 5);
   engine.setWindow(600, 600, "Hello Modern 2D World", 0, 1);
   engine.init();
