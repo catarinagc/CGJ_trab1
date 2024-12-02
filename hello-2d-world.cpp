@@ -6,7 +6,7 @@
 // Copyright (c) 2013-24 by Carlos Martinho
 // 
 // Catarina Gonçalves Costa ist1112377
-//
+// Francisco Gonçalves Ferreira ist96861
 // INTRODUCES:
 // GL PIPELINE, mglShader.hpp, mglConventions.hpp
 //
